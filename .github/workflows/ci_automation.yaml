@@ -1,0 +1,39 @@
+# Name of worflow/job/action
+name: Run Pandas Job
+
+# on Triggers: When to do and schedule workflows
+# Triggers for worflow
+on:
+  # event based triggers
+  push:
+    branches:
+    - main
+    - master
+  pull_request:
+    branches:
+    - main
+    # time based trigger
+  schedule:
+  - cron: '0 0 * * *'
+
+# jobs: What to do
+# All will be executed based on the schedule
+# So we are given a application to write a job to spin cluster - setup python - run a python script, and we have written the below script
+jobs:
+  run_pandas_job:
+    # Runs their own computers [Containers] in the backend
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      #owner/repo@version
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      # We can leverage actions created already and use them. 90% Actions will be already created in the Github action market place
+      uses: actions/setup-python@v4
+
+    - name: Install dependencies
+      run: pip install pandas
+
+    - name: Run Pandas job
+      run: python app.py
